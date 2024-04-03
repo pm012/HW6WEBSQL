@@ -127,6 +127,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+hw6_sql_env/
 
 # Spyder project settings
 .spyderproject
