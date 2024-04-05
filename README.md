@@ -1,4 +1,8 @@
 # HW6WEBSQL
+Instructions
+TBD
+
+Task details: 
 
 Implement a database whose schema contains:
 
@@ -10,7 +14,7 @@ Implement a database whose schema contains:
 
 Fill the resulting database with random data (~30-50 students, 3 groups, 5-8 subjects, 3-5 teachers, up to 20 grades for each student in all subjects).
 
-Use the Faker pack to fill.
+Use the Faker pack to fill the database.
 
 Make the following selections from the obtained database:
 

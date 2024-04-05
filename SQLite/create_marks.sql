@@ -1,0 +1,1 @@
+CREATE TABLE IF NOT EXISTS grades (id INTEGER PRIMARY KEY, student_id INTEGER, subject_id INTEGER, grade INTEGER, date TEXT, FOREIGN KEY (student_id) REFERENCES students(id), FOREIGN KEY (subject_id) REFERENCES subjects(id))

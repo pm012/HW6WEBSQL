@@ -1,0 +1,1 @@
+CREATE TABLE IF NOT EXISTS teachers (id INTEGER PRIMARY KEY, teacher_name TEXT)

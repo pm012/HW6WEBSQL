@@ -1,0 +1,1 @@
+INSERT INTO subjects (subj_name, teacher_id) VALUES (?, ?)

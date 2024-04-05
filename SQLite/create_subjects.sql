@@ -1,0 +1,1 @@
+CREATE TABLE IF NOT EXISTS subjects (id INTEGER PRIMARY KEY, subj_name TEXT, teacher_id INTEGER, FOREIGN KEY (teacher_id) REFERENCES teachers(id))
