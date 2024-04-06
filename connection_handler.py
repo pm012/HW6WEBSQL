@@ -1,6 +1,6 @@
 import configparser
 from abc import  ABC
-import logger_instatnce
+import logger_instance
 import sqlite3
 import mysql.connector
 import os
@@ -14,6 +14,7 @@ class AbstractConnectionHandler(ABC):
 class SQLConnector(AbstractConnectionHandler):
     def __init__(self, db_type='sqlite'):
         self.available_types = ['sqlite', 'mariadb']
+        self.logger = logger_instance.HWLogging()
 
         if db_type.lower() in self.available_types:
             self.db_type = db_type
@@ -26,6 +27,7 @@ class SQLConnector(AbstractConnectionHandler):
         config.read(CONFIG_FILE)
         if self.db_type == 'sqlite':
             db_file = config.get('sqlite', 'database_file')
+            self.logger('SQLite connection db is established')
             return sqlite3.connect(db_file)
         elif self.db_type == 'mariadb':
             host = config.get('mariadb', 'host')
@@ -42,9 +44,10 @@ class SQLConnector(AbstractConnectionHandler):
             )
             return connection
         else:
+            self.logger(f"Incorrect DB type. Connector for {self.db_type} is not implemented")
             raise NotImplementedError(f"{self.db_type} db connector not implemented. Please check if the connector type is defined correctly or implement the connector")
         
-    def get_queries(self, db_type):    
+    def get_queries(self, db_type='sqlite'):    
         path = ''
         result = {}
         if db_type == 'mariadb':
@@ -64,11 +67,11 @@ class SQLConnector(AbstractConnectionHandler):
 
 
 
-if __name__ == '__main__':
-    sq = SQLConnector()
-    file_contents= sq.get_queries('sqlite')
-    for key, value in file_contents.items():
-        print(f'{key}: {value}')
+# if __name__ == '__main__':
+#     sq = SQLConnector()
+#     file_contents= sq.get_queries('sqlite')
+#     for key, value in file_contents.items():
+#         print(f'{key}: {value}')
 
 
 

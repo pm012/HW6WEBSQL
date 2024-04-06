@@ -2,7 +2,7 @@ import logging
 import configparser
 
 class HWLogging():
-    def __inint__(self, config_file='config.ini'):
+    def __init__(self, config_file='config.ini'):
         self.config_file = config_file
         
 
