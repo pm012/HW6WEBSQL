@@ -1,1 +1,1 @@
-INSERT INTO groups (group_name, group_code) VALUES (?, ?)
+INSERT INTO groups (group_code, group_name) VALUES (?, ?)

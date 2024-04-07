@@ -6,7 +6,7 @@ import logger_instance
 class DataGenerator():    
 
     def __init__(self):
-        self.logger = logger_instance.HWLogging().get_logger() 
+        self.logger = logger_instance.HWLogging()
         self.fakegen = Faker()
         self.DB_TYPE = 'sqlite' # Can be selected 'mariadb' or 'sqlite'
         
@@ -22,47 +22,49 @@ class DataGenerator():
         self.GRADE_RANGE = (1, 12)
 
         # Create  connection
-        self.connection = connection_handler.SQLConnector(self.DB_TYPE)
-        self.queries = self.connection.get_queries(self.DB_TYPE)
-        self.cursor = self.connection.cursor()
+        self.connector = connection_handler.SQLConnector()        
+        self.queries = self.connector.get_queries(self.DB_TYPE)
+        self.cursor = self.connector.get_cursor()
     
     def create_populate_database(self):  
 
         create_script_names=['create_students', 'create_groups', 'create_teachers', 'create_subjects', 'create_marks']
         # Create tables
         for script_name in create_script_names:
-            self.logger.info("script_name are applied and table is created")
+            self.logger.log_info("script_name are applied and table is created")
             self.execute_table_create_script(self.queries[script_name])
 
-        self.connection.commit()
+        self.connector.connection.commit()
 
         # Generate random data and fill tables
-        self.generate_data(cursor)
+        self.generate_data()
 
-        self.connection.close()
+        self.connector.close_connection()
 
     def generate_data(self):
         
         fake = self.fakegen
-        # Generate students
-        self.logger.info("Generate students")
-        for _ in range(random.randint(self.NUMBER_OF_STUDENTS[0], self.NUMBER_OF_STUDENTS[1])):
-            self.cursor.execute(self.queries['insert_students'], (fake.name(),))
-
-        # Generate groups
-        self.logger.info("Generate groups")
+        # Generate groups 
+        self.logger.log_info("Generate groups")        
         groups = self.groups
-        for group in groups:
-            self.cursor.execute(self.queries['insert_groups'], (group,))
+        for id, group in groups.items():
+            self.cursor.execute(self.queries['insert_groups'], (id, group))
+
+        # Generate students and assign to groups
+        self.logger.log_info("Generate students")
+        group_ids = [row[0] for row in self.cursor.execute('SELECT id FROM groups')]
+        for _ in range(random.randint(self.NUMBER_OF_STUDENTS[0], self.NUMBER_OF_STUDENTS[1])):
+            group_id = random.choice(group_ids)
+            self.cursor.execute(self.queries['insert_students'], (fake.name(),group_id)) 
 
         # Generate teachers
-        self.logger.info("Generate teachers")
+        self.logger.log_info("Generate teachers")
         for _ in range(random.randint(self.NUMBER_OF_TEACHERS[0], self.NUMBER_OF_TEACHERS[1])):
             self.cursor.execute(self.queries['insert_teachers'], (fake.name(),))
 
         # Generate subjects and assign teachers
-        self.logger.info("Generate subjects")
-        subjects = ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'History', 'Literature', 'Art']
+        self.logger.log_info("Generate subjects")
+        subjects = self.subjects
         teacher_ids = [row[0] for row in self.cursor.execute('SELECT id FROM teachers')]
         for subject in subjects:
             teacher_id = random.choice(teacher_ids)
@@ -74,9 +76,10 @@ class DataGenerator():
         for student_id in student_ids:
             for subject_id in subject_ids:
                 grade = random.randint(1, 10)
-                date = fake.date_between(start_date='-1y', end_date='today')
+                date = fake.date_between(start_date='-1y', end_date='today').strftime('%Y-%m-%d')
                 self.cursor.execute(self.queries['insert_marks'],
                            (student_id, subject_id, grade, date))
+        self.connector.connection.commit()
     
     def execute_table_create_script(self, query):
         self.cursor.execute(query)

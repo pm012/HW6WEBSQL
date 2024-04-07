@@ -12,40 +12,60 @@ class AbstractConnectionHandler(ABC):
         pass
 
 class SQLConnector(AbstractConnectionHandler):
-    def __init__(self, db_type='sqlite'):
+    _instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if cls._instance is None:
+            cls._instance=super(SQLConnector, cls).__new__(cls)
+            cls._instance._initialize_connection()
+        return cls._instance
+
+
+
+
+    def _initialize_connection(self):
         self.available_types = ['sqlite', 'mariadb']
         self.logger = logger_instance.HWLogging()
 
-        if db_type.lower() in self.available_types:
-            self.db_type = db_type
-        else: 
-            print('Unknown database type. Please, implement additional connection logic')
-            self.db_type = None
-
-    def get_connection(self):
         config = configparser.ConfigParser()
         config.read(CONFIG_FILE)
+        db_type = config.get('database', 'db_type')
+
+        if db_type.lower() in self.available_types:
+            self.db_type = db_type
+        else:
+            print('Unknown database type. Please, implement additional connection logic')
+            self.db_type = None
+            self.connection = None  # Initialize connection attribute
+
         if self.db_type == 'sqlite':
             db_file = config.get('sqlite', 'database_file')
-            self.logger('SQLite connection db is established')
-            return sqlite3.connect(db_file)
+            self.logger.log_info('SQLite connection db is established')
+            self.connection = sqlite3.connect(db_file)
         elif self.db_type == 'mariadb':
             host = config.get('mariadb', 'host')
             port = config.getint('mariadb', 'port')
             username = config.get('mariadb', 'username')
             password = config.get('mariadb', 'password')
             db_name = config.get('mariadb', 'db_name')
-            connection = mysql.connector.connect(
-                host = host,
-                port = port,
-                user = username,
-                password = password,
-                database = db_name
+            self.connection = mysql.connector.connect(
+                host=host,
+                port=port,
+                user=username,
+                password=password,
+                database=db_name
             )
-            return connection
         else:
-            self.logger(f"Incorrect DB type. Connector for {self.db_type} is not implemented")
-            raise NotImplementedError(f"{self.db_type} db connector not implemented. Please check if the connector type is defined correctly or implement the connector")
+            self.logger.log_info(f"Incorrect DB type. Connector for {self.db_type} is not implemented")
+            raise NotImplementedError(f"{self.db_type} db connector not implemented.")
+
+    def get_cursor(self):
+        return self.connection.cursor()
+
+    def close_connection(self):
+        if self.connection:
+            self.connection.close()
+            self.logger.log_info('Database connection closed.')
         
     def get_queries(self, db_type='sqlite'):    
         path = ''
