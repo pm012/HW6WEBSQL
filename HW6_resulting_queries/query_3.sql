@@ -1,0 +1,1 @@
+SELECT grp.group_name, AVG(grades.grade) as avg_grade FROM students AS s INNER JOIN grades AS grades ON s.id = grades.student_id INNER JOIN subjects AS subj ON grades.subject_id = subj.id INNER JOIN groups as grp on s.group_id = grp.id WHERE subj.subj_name = :subject_name GROUP BY grp.id

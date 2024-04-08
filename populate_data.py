@@ -28,7 +28,7 @@ class DataGenerator():
     
     def create_populate_database(self):  
 
-        create_script_names=['create_students', 'create_groups', 'create_teachers', 'create_subjects', 'create_marks']
+        create_script_names=['create_groups', 'create_students', 'create_teachers', 'create_subjects', 'create_marks']
         # Create tables
         for script_name in create_script_names:
             self.logger.log_info("script_name are applied and table is created")

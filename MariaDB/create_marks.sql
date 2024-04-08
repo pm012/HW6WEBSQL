@@ -1,0 +1,1 @@
+CREATE TABLE IF NOT EXISTS grades (id INT  AUTO_INCREMENT NOT NULL, student_id INT, subject_id INT, grade INT, date TEXT, FOREIGN KEY (student_id) REFERENCES students(id), PRIMARY KEY (id) FOREIGN KEY (subject_id) REFERENCES subjects(id));

@@ -1,0 +1,1 @@
+SELECT std.name , g.grade, g.date  from grades g  INNER JOIN  students std  on g.student_id  = std.id INNER JOIN groups grp ON std.group_id = grp.id INNER JOIN subjects sbj ON g.subject_id =sbj.id  WHERE (grp.group_name = :group_name) AND (sbj.subj_name = :subject_name)

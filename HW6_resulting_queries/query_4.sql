@@ -1,0 +1,1 @@
+SELECT AVG(grd.grade) from grades grd

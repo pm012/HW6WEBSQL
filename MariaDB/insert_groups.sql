@@ -1,0 +1,1 @@
+INSERT INTO groups (group_code, group_name) VALUES (%s, %s)

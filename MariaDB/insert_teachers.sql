@@ -1,0 +1,1 @@
+INSERT INTO teachers (teacher_name) VALUES (%s)

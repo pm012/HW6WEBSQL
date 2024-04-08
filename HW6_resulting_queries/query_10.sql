@@ -1,0 +1,1 @@
+SELECT subj.subj_name FROM students AS std INNER JOIN groups grp ON std.group_id = grp.id INNER JOIN grades grd ON std.id  = grd.student_id INNER JOIN subjects subj ON grd.subject_id  = subj.id INNER JOIN teachers t ON subj.teacher_id = t.id WHERE std.name = :student_name AND t.teacher_name = :teacher_name

@@ -1,0 +1,1 @@
+SELECT s.subj_name, t.teacher_name, AVG(grd.grade) FROM grades grd INNER JOIN subjects s ON grd.subject_id = s.id INNER JOIN teachers t ON s.teacher_id = t.id WHERE t.teacher_name = :teacher_name GROUP BY s.subj_name

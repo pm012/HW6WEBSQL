@@ -1,0 +1,1 @@
+SELECT s.name, AVG(grades.grade) as avg_grade FROM students AS s INNER JOIN grades AS grades ON s.id = grades.student_id GROUP BY s.id ORDER BY avg_grade DESC LIMIT 5

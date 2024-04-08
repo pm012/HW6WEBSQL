@@ -1,0 +1,1 @@
+CREATE TABLE IF NOT EXISTS subjects (id INT AUTO_INCREMENT NOT NULL, subj_name VARCHAR(255), teacher_id INT, PRIMARY KEY (id) FOREIGN KEY (teacher_id) REFERENCES teachers(id));

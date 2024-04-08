@@ -1,0 +1,1 @@
+SELECT s.name from students s INNER JOIN groups grp on s.group_id = grp.id WHERE grp.group_name = :group_name
