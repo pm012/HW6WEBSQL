@@ -1,8 +1,20 @@
 # HW6WEBSQL
-Instructions
-TBD
 
-Task details: 
+Instructions and project description
+
+1. To generate DB data it can be used populate_data.py script. It creates tables and fills them with fake data.
+2. It can be changed DB type (now it's implemented MariaDB and SQLite). The DB type can be changed in config.ini file.
+   Don't forget to update DB cridentials as well. In case of MariaDB database should be created manually.
+3. You can run resulting queries from Home Work #6 (stored in HW6_resulting_queries folder) using any SQL client (e.g. DBeaver,DBGate...etc).
+4. It is possible to run and get results for the queries using queries_exec.py script. You will need to set number of query and provide any parameters requested. To exit set 0 and hit enter key.
+
+Sample data to use in query (present in database.db):
+student = Stacy Flores
+group name = Applied Mathematics
+subject name = Statistics
+teacher = Michael Soto
+
+Task details:
 
 Implement a database whose schema contains:
 
