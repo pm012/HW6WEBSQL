@@ -13,7 +13,7 @@ tasks = {
     7: "Find the grades of students in a separate group for a specific subject.",
     8: "Find the average score given by a certain teacher in his subjects.",
     9: "Find a list of courses a student is taking.",
-    10: "A list of courses taught to a specific student by a specific instructor."
+    10: "A list of courses taught to a specific student by a specific teacher."
 
 }
 
